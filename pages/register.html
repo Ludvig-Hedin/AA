@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skapa konto | Personlig Assistent</title>
+  <meta name="description" content="Skapa ett konto på Personlig Assistent för att hantera dina uppgifter, mål och kalenderhändelser.">
+  
+  <!-- Favicon and app icons -->
+  <link rel="icon" href="/assets/icons/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+  
+  <!-- PWA manifest -->
+  <link rel="manifest" href="/manifest.json">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="site-wrapper">
+    <!-- Header -->
+    <header class="site-header">
+      <div class="header-container container">
+        <a href="/" class="header-logo">Personlig Assistent</a>
+        
+        <nav class="header-nav">
+          <div data-non-auth>
+            <a href="/login.html" class="btn btn-secondary mr-2">Logga in</a>
+            <a href="/register.html" class="btn btn-primary">Skapa konto</a>
+          </div>
+          
+          <div data-auth class="hidden header-user">
+            <span data-user-name class="mr-2">Användare</span>
+            <button data-logout class="btn-icon">
+              <i class="fas fa-sign-out-alt"></i> Logga ut
+            </button>
+          </div>
+          
+          <button class="mobile-nav-toggle" aria-expanded="false" aria-controls="mobile-nav">
+            <i class="fas fa-bars"></i>
+            <span class="sr-only">Meny</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+    
+    <!-- Mobile Navigation -->
+    <div id="mobile-nav" class="mobile-nav" aria-hidden="true">
+      <nav class="container">
+        <ul>
+          <li><a href="/">Hem</a></li>
+          <li data-auth class="hidden"><a href="/dashboard.html">Dashboard</a></li>
+          <li data-auth class="hidden"><a href="/tasks/">Uppgifter</a></li>
+          <li data-auth class="hidden"><a href="/goals/">Mål</a></li>
+          <li data-auth class="hidden"><a href="/calendar.html">Kalender</a></li>
+          <li data-auth class="hidden"><a href="/settings.html">Inställningar</a></li>
+          <li data-non-auth><a href="/login.html">Logga in</a></li>
+          <li data-non-auth><a href="/register.html">Skapa konto</a></li>
+        </ul>
+      </nav>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <div class="flex justify-center">
+          <div class="w-full md:w-1/2 lg:w-1/3">
+            <div class="card">
+              <div class="card-header">
+                <h1 class="card-title">Skapa konto</h1>
+              </div>
+              
+              <form id="register-form" class="mt-4">
+                <div class="form-group">
+                  <label for="name" class="form-label">Namn</label>
+                  <input type="text" id="name" name="name" class="form-input" required autocomplete="name">
+                </div>
+                
+                <div class="form-group">
+                  <label for="email" class="form-label">E-post</label>
+                  <input type="email" id="email" name="email" class="form-input" required autocomplete="email">
+                </div>
+                
+                <div class="form-group">
+                  <label for="password" class="form-label">Lösenord</label>
+                  <input type="password" id="password" name="password" class="form-input" required autocomplete="new-password" minlength="8">
+                  <div class="text-sm text-muted mt-1">Lösenordet måste vara minst 8 tecken långt.</div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="password-confirm" class="form-label">Bekräfta lösenord</label>
+                  <input type="password" id="password-confirm" name="password_confirm" class="form-input" required autocomplete="new-password" minlength="8">
+                </div>
+                
+                <div class="form-group">
+                  <div class="flex items-start">
+                    <input type="checkbox" id="terms" name="terms" class="mt-1 mr-2" required>
+                    <label for="terms">Jag godkänner <a href="#" class="text-primary">användarvillkoren</a> och <a href="#" class="text-primary">integritetspolicyn</a>.</label>
+                  </div>
+                </div>
+                
+                <div class="form-error hidden text-error mb-4"></div>
+                
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary w-full">Skapa konto</button>
+                </div>
+                
+                <div class="text-center mt-4">
+                  <p>Har du redan ett konto? <a href="/login.html" class="text-primary">Logga in</a></p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="site-footer bg-card border-t border-border py-4">
+      <div class="container">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <p>&copy; 2023 Personlig Assistent. Alla rättigheter förbehållna.</p>
+          </div>
+          <div class="flex space-x-4">
+            <a href="#" class="text-muted hover:text-primary">
+              <i class="fab fa-twitter"></i>
+              <span class="sr-only">Twitter</span>
+            </a>
+            <a href="#" class="text-muted hover:text-primary">
+              <i class="fab fa-facebook"></i>
+              <span class="sr-only">Facebook</span>
+            </a>
+            <a href="#" class="text-muted hover:text-primary">
+              <i class="fab fa-instagram"></i>
+              <span class="sr-only">Instagram</span>
+            </a>
+            <a href="#" class="text-muted hover:text-primary">
+              <i class="fab fa-github"></i>
+              <span class="sr-only">GitHub</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- Notification container -->
+  <div class="notification-container"></div>
+  
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- Application Scripts -->
+  <script src="/js/app.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/utils.js"></script>
+  
+  <script>
+    // Add password validation
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('register-form');
+      const password = document.getElementById('password');
+      const passwordConfirm = document.getElementById('password-confirm');
+      const errorElement = document.querySelector('.form-error');
+      
+      form.addEventListener('submit', (e) => {
+        // Check if passwords match
+        if (password.value !== passwordConfirm.value) {
+          e.preventDefault();
+          errorElement.textContent = 'Lösenorden matchar inte.';
+          errorElement.classList.remove('hidden');
+          return;
+        }
+        
+        // Validate password strength
+        const validation = window.utils.validatePassword(password.value);
+        if (validation.score < 3) {
+          e.preventDefault();
+          errorElement.textContent = validation.feedback.join(' ');
+          errorElement.classList.remove('hidden');
+          return;
+        }
+        
+        // Clear any previous errors
+        errorElement.textContent = '';
+        errorElement.classList.add('hidden');
+      });
+    });
+  </script>
+</body>
+</html> 
