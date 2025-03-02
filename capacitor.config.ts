@@ -7,7 +7,8 @@ const config: CapacitorConfig = {
   server: {
     androidScheme: 'https',
     iosScheme: 'https',
-    hostname: 'app.aiassistant.com',
+    url: 'https://aa-21a47wt0f-ludvighedin15-gmailcoms-projects.vercel.app',
+    cleartext: true,
   },
   plugins: {
     SplashScreen: {
