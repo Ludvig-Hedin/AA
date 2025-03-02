@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar - TaskFlow</title>
+  <link rel="stylesheet" href="/styles/styles.css">
+  <link rel="stylesheet" href="/styles/icons.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div class="min-h-screen flex flex-col">
+    <header class="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur">
+      <div class="container mx-auto flex h-16 items-center justify-between px-4">
+        <div class="flex items-center">
+          <div class="logo">
+            <a href="/" class="flex items-center">
+              <div class="logo-symbol bg-primary text-primary-foreground rounded-lg p-1 flex items-center justify-center">
+                <span class="icon ficheckircle h-6 w-6 mr-1.5"></span>
+              </div>
+              <span class="font-bold">TaskFlow</span>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center space-x-6">
+          <a 
+            href="/dashboard.html" 
+            class="text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
+          >
+            Dashboard
+          </a>
+          <a 
+            href="/dashboard/tasks.html" 
+            class="text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
+          >
+            Tasks
+          </a>
+          <a 
+            href="/dashboard/calendar.html" 
+            class="text-sm font-medium transition-colors hover:text-primary text-primary"
+          >
+            Calendar
+          </a>
+          <div class="flex items-center space-x-4">
+            <div class="theme-toggle">
+              <button type="button" class="bg-accent text-accent-foreground rounded-md p-2 flex items-center justify-center" aria-label="Toggle theme">
+                <span class="icon fisun h-5 w-5"></span>
+              </button>
+            </div>
+            <button
+              class="flex items-center rounded-md bg-destructive px-3 py-2 text-sm font-medium text-destructive-foreground hover:bg-destructive/90"
+            >
+              <span class="icon filogout mr-2"></span>
+              Sign Out
+            </button>
+          </div>
+        </nav>
+        
+        <!-- Mobile Menu Button -->
+        <div class="flex items-center md:hidden">
+          <div class="theme-toggle">
+            <button type="button" class="bg-accent text-accent-foreground rounded-md p-2 flex items-center justify-center" aria-label="Toggle theme">
+              <span class="icon fisun h-5 w-5"></span>
+            </button>
+          </div>
+          <button
+            class="ml-2 rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            aria-label="Toggle menu"
+          >
+            <span class="icon fimenu h-6 w-6"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+    
+    <main class="flex-1 container mx-auto px-4 py-8">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Calendar</h1>
+        <button class="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
+          Add Event
+        </button>
+      </div>
+      
+      <!-- Calendar Controls -->
+      <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center space-x-4">
+          <button class="bg-accent text-accent-foreground px-3 py-1 rounded-md hover:bg-accent/80 transition-colors">
+            Today
+          </button>
+          <div class="flex items-center space-x-2">
+            <button class="p-1 rounded-md hover:bg-accent">
+              <span class="icon fichevronright transform rotate-180"></span>
+            </button>
+            <h2 class="text-xl font-semibold">June 2023</h2>
+            <button class="p-1 rounded-md hover:bg-accent">
+              <span class="icon fichevronright"></span>
+            </button>
+          </div>
+        </div>
+        
+        <div class="flex items-center space-x-2">
+          <button class="px-3 py-1 rounded-md bg-primary text-primary-foreground">
+            Month
+          </button>
+          <button class="px-3 py-1 rounded-md border border-input hover:bg-accent">
+            Week
+          </button>
+          <button class="px-3 py-1 rounded-md border border-input hover:bg-accent">
+            Day
+          </button>
+        </div>
+      </div>
+      
+      <!-- Calendar Grid -->
+      <div class="card overflow-hidden">
+        <!-- Days of Week Header -->
+        <div class="grid grid-cols-7 border-b border-border">
+          <div class="p-2 text-center font-medium">Sun</div>
+          <div class="p-2 text-center font-medium">Mon</div>
+          <div class="p-2 text-center font-medium">Tue</div>
+          <div class="p-2 text-center font-medium">Wed</div>
+          <div class="p-2 text-center font-medium">Thu</div>
+          <div class="p-2 text-center font-medium">Fri</div>
+          <div class="p-2 text-center font-medium">Sat</div>
+        </div>
+        
+        <!-- Calendar Days -->
+        <div class="grid grid-cols-7 grid-rows-5 border-b border-border">
+          <!-- Week 1 -->
+          <div class="min-h-[100px] p-2 border-r border-b border-border text-muted-foreground">
+            <div class="text-sm">28</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border text-muted-foreground">
+            <div class="text-sm">29</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border text-muted-foreground">
+            <div class="text-sm">30</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border text-muted-foreground">
+            <div class="text-sm">31</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">1</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">2</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-b border-border">
+            <div class="text-sm">3</div>
+          </div>
+          
+          <!-- Week 2 -->
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">4</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">5</div>
+            <div class="mt-1 text-xs p-1 rounded bg-primary/10 text-primary truncate">
+              9:00 AM Meeting
+            </div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">6</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">7</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">8</div>
+            <div class="mt-1 text-xs p-1 rounded bg-destructive/10 text-destructive truncate">
+              2:00 PM Deadline
+            </div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">9</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-b border-border">
+            <div class="text-sm">10</div>
+          </div>
+          
+          <!-- Week 3 -->
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">11</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">12</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">13</div>
+            <div class="mt-1 text-xs p-1 rounded bg-primary/10 text-primary truncate">
+              11:00 AM Call
+            </div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">14</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">15</div>
+            <div class="mt-1 text-xs p-1 rounded bg-primary/10 text-primary truncate">
+              9:00 AM Standup
+            </div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border bg-accent/20">
+            <div class="text-sm font-medium">16</div>
+            <div class="mt-1 text-xs p-1 rounded bg-primary/10 text-primary truncate">
+              2:00 PM Presentation
+            </div>
+          </div>
+          <div class="min-h-[100px] p-2 border-b border-border">
+            <div class="text-sm">17</div>
+          </div>
+          
+          <!-- Week 4 -->
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">18</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">19</div>
+            <div class="mt-1 text-xs p-1 rounded bg-primary/10 text-primary truncate">
+              10:00 AM Review
+            </div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">20</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">21</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">22</div>
+            <div class="mt-1 text-xs p-1 rounded bg-primary/10 text-primary truncate">
+              9:00 AM Standup
+            </div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-b border-border">
+            <div class="text-sm">23</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-b border-border">
+            <div class="text-sm">24</div>
+          </div>
+          
+          <!-- Week 5 -->
+          <div class="min-h-[100px] p-2 border-r border-border">
+            <div class="text-sm">25</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-border">
+            <div class="text-sm">26</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-border">
+            <div class="text-sm">27</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-border">
+            <div class="text-sm">28</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-border">
+            <div class="text-sm">29</div>
+            <div class="mt-1 text-xs p-1 rounded bg-primary/10 text-primary truncate">
+              9:00 AM Standup
+            </div>
+            <div class="mt-1 text-xs p-1 rounded bg-destructive/10 text-destructive truncate">
+              5:00 PM Deadline
+            </div>
+          </div>
+          <div class="min-h-[100px] p-2 border-r border-border">
+            <div class="text-sm">30</div>
+          </div>
+          <div class="min-h-[100px] p-2 border-border">
+            <div class="text-sm text-muted-foreground">1</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Upcoming Events -->
+      <div class="mt-8">
+        <h2 class="text-xl font-semibold mb-4">Upcoming Events</h2>
+        <div class="space-y-3">
+          <div class="flex items-start p-3 border border-border rounded-md">
+            <div class="flex-shrink-0 w-12 h-12 bg-accent flex flex-col items-center justify-center rounded-md mr-3">
+              <span class="text-xs font-medium">JUN</span>
+              <span class="text-lg font-bold">16</span>
+            </div>
+            <div class="flex-1">
+              <p class="font-medium">Client Presentation</p>
+              <p class="text-sm text-muted-foreground">2:00 PM - 3:30 PM</p>
+              <p class="text-sm text-muted-foreground">Conference Room A</p>
+            </div>
+            <div class="flex space-x-2">
+              <button class="p-1 text-muted-foreground hover:text-primary">
+                <span class="icon fichevronright"></span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="flex items-start p-3 border border-border rounded-md">
+            <div class="flex-shrink-0 w-12 h-12 bg-accent flex flex-col items-center justify-center rounded-md mr-3">
+              <span class="text-xs font-medium">JUN</span>
+              <span class="text-lg font-bold">19</span>
+            </div>
+            <div class="flex-1">
+              <p class="font-medium">Project Review</p>
+              <p class="text-sm text-muted-foreground">10:00 AM - 11:00 AM</p>
+              <p class="text-sm text-muted-foreground">Virtual Meeting</p>
+            </div>
+            <div class="flex space-x-2">
+              <button class="p-1 text-muted-foreground hover:text-primary">
+                <span class="icon fichevronright"></span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="flex items-start p-3 border border-border rounded-md">
+            <div class="flex-shrink-0 w-12 h-12 bg-accent flex flex-col items-center justify-center rounded-md mr-3">
+              <span class="text-xs font-medium">JUN</span>
+              <span class="text-lg font-bold">29</span>
+            </div>
+            <div class="flex-1">
+              <p class="font-medium">Project Deadline</p>
+              <p class="text-sm text-muted-foreground">5:00 PM</p>
+              <p class="text-sm text-muted-foreground">Final Deliverables Due</p>
+            </div>
+            <div class="flex space-x-2">
+              <button class="p-1 text-muted-foreground hover:text-primary">
+                <span class="icon fichevronright"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <footer>
+      <div class="container">
+        <div class="footer-bottom">
+          <p>
+            &copy; 2023 TaskFlow. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <script>
+    // Simple theme toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const themeToggle = document.querySelector('[aria-label="Toggle theme"]');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+          document.documentElement.classList.toggle('dark');
+          
+          // Update the icon
+          const icon = themeToggle.querySelector('.icon');
+          if (document.documentElement.classList.contains('dark')) {
+            icon.className = 'icon fimoon h-5 w-5';
+          } else {
+            icon.className = 'icon fisun h-5 w-5';
+          }
+        });
+      }
+      
+      // Mobile menu toggle
+      const menuButton = document.querySelector('[aria-label="Toggle menu"]');
+      const mobileMenu = document.createElement('div');
+      mobileMenu.className = 'md:hidden bg-background border-b border-border';
+      mobileMenu.innerHTML = `
+        <div class="space-y-1 px-4 pb-3 pt-2">
+          <a
+            href="/dashboard.html"
+            class="block rounded-md px-3 py-2 text-base font-medium hover:bg-accent text-muted-foreground"
+          >
+            Dashboard
+          </a>
+          <a
+            href="/dashboard/tasks.html"
+            class="block rounded-md px-3 py-2 text-base font-medium hover:bg-accent text-muted-foreground"
+          >
+            Tasks
+          </a>
+          <a
+            href="/dashboard/calendar.html"
+            class="block rounded-md px-3 py-2 text-base font-medium bg-primary text-primary-foreground"
+          >
+            Calendar
+          </a>
+          <button
+            class="mt-2 flex w-full items-center rounded-md bg-destructive px-3 py-2 text-base font-medium text-destructive-foreground hover:bg-destructive/90"
+          >
+            <span class="icon filogout mr-2"></span>
+            Sign Out
+          </button>
+        </div>
+      `;
+      mobileMenu.style.display = 'none';
+      
+      document.querySelector('header').after(mobileMenu);
+      
+      if (menuButton) {
+        menuButton.addEventListener('click', function() {
+          mobileMenu.style.display = mobileMenu.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+    });
+  </script>
+</body>
+</html> 
