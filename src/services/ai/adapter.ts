@@ -1,3 +1,5 @@
+import { getAIServiceConfig } from '../../config/config';
+
 // AI Service Adapter Interface
 export interface AIServiceAdapter {
   generateResponse: (prompt: string, options?: any) => Promise<string>;
@@ -72,6 +74,40 @@ export class AnthropicAdapter implements AIServiceAdapter {
   }
 }
 
+// DeepSeek Adapter
+export class DeepSeekAdapter implements AIServiceAdapter {
+  private apiKey: string;
+  name = 'DeepSeek';
+  
+  constructor(apiKey: string) {
+    this.apiKey = apiKey;
+  }
+  
+  async generateResponse(prompt: string, options: any = {}): Promise<string> {
+    try {
+      const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.apiKey}`
+        },
+        body: JSON.stringify({
+          model: options.model || 'deepseek-chat',
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: options.maxTokens || 500,
+          temperature: options.temperature || 0.7
+        })
+      });
+      
+      const data = await response.json();
+      return data.choices[0].message.content;
+    } catch (error) {
+      console.error('DeepSeek API error:', error);
+      throw new Error('Failed to generate response from DeepSeek');
+    }
+  }
+}
+
 // Mock Adapter for Development
 export class MockAIAdapter implements AIServiceAdapter {
   name = 'Development AI';
@@ -84,16 +120,75 @@ export class MockAIAdapter implements AIServiceAdapter {
   }
 }
 
+// Self-Hosted Adapter
+export class SelfHostedAdapter implements AIServiceAdapter {
+  private apiEndpoint: string;
+  private apiKey: string;
+  name = 'Self-Hosted LLM';
+  
+  constructor(apiEndpoint: string, apiKey: string) {
+    this.apiEndpoint = apiEndpoint;
+    this.apiKey = apiKey;
+  }
+  
+  async generateResponse(prompt: string, options: any = {}): Promise<string> {
+    try {
+      const response = await fetch(this.apiEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.apiKey}`
+        },
+        body: JSON.stringify({
+          inputs: prompt,
+          parameters: {
+            max_new_tokens: options.maxTokens || 500,
+            temperature: options.temperature || 0.7,
+            do_sample: true,
+            top_p: 0.95
+          }
+        })
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`API error (${response.status}): ${errorText}`);
+      }
+      
+      const data = await response.json();
+      return data.generated_text;
+    } catch (error) {
+      console.error('Self-hosted LLM error:', error);
+      throw new Error('Failed to generate response from self-hosted model');
+    }
+  }
+}
+
 // AI Service Factory
 export class AIServiceFactory {
-  static createAdapter(type: string, apiKey?: string): AIServiceAdapter {
-    switch (type) {
-      case 'openai':
-        if (!apiKey) throw new Error('API key required for OpenAI');
-        return new OpenAIAdapter(apiKey);
-      case 'anthropic':
-        if (!apiKey) throw new Error('API key required for Anthropic');
-        return new AnthropicAdapter(apiKey);
+  static createAdapter(providerOverride?: string): AIServiceAdapter {
+    const config = getAIServiceConfig();
+    const provider = providerOverride || config.type;
+    
+    switch (provider) {
+      case 'deepseek':
+        if (!config.deepseekApiKey) {
+          throw new Error('API key is required for DeepSeek');
+        }
+        return new DeepSeekAdapter(config.deepseekApiKey);
+      
+      case 'self-hosted-chat':
+        if (!config.apiKey || !config.endpoint) {
+          throw new Error('API key and endpoint are required for self-hosted models');
+        }
+        return new SelfHostedAdapter(config.endpoint + '/api/chat', config.apiKey);
+      
+      case 'self-hosted-reasoning':
+        if (!config.apiKey || !config.endpoint) {
+          throw new Error('API key and endpoint are required for self-hosted models');
+        }
+        return new SelfHostedAdapter(config.endpoint + '/api/reasoning', config.apiKey);
+      
       case 'mock':
       default:
         return new MockAIAdapter();

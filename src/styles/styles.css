@@ -30,6 +30,22 @@
   --font-family: Helvetica, Arial, sans-serif;
 }
 
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
 /* Dark mode styles */
 .dark {
   --bg-primary: var(--color-dark-bg-primary);
@@ -253,4 +269,61 @@ body {
   .input-field {
     @apply w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white;
   }
+}
+
+/* Add transition utility class */
+.transition-width {
+  transition-property: width, min-width;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Make sure Tailwind's duration-300 and ease-in-out work with our custom transition */
+.duration-300 {
+  transition-duration: 300ms;
+}
+
+.ease-in-out {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Lägg till dessa animationer */
+@keyframes chatAppear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 50%) translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 50%) translateY(0) scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Lägg till denna klass i din styles.css */
+.rotate-45 {
+  transform: rotate(45deg);
+  display: inline-block;
+}
+
+/* Förhindra textmarkering under drag */
+.select-none {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 } 

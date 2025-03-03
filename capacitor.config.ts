@@ -7,7 +7,7 @@ const config: CapacitorConfig = {
   server: {
     androidScheme: 'https',
     iosScheme: 'https',
-    url: 'https://aa-21a47wt0f-ludvighedin15-gmailcoms-projects.vercel.app',
+    url: 'https://aa-820r79xvl-ludvighedin15-gmailcoms-projects.vercel.app',
     cleartext: true,
   },
   plugins: {

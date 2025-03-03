@@ -1,14 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Assistant Web App</title>
     <meta name="description" content="A modern AI-powered web application with secure authentication and chat interface" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+      #loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        z-index: 1000;
+        transition: opacity 0.5s ease-out;
+      }
+      #error-display {
+        margin-top: 20px;
+        padding: 10px;
+        max-width: 80%;
+        background: #ffeeee;
+        border: 1px solid #ff0000;
+        border-radius: 4px;
+        display: none;
+        white-space: pre-wrap;
+      }
+      @media (prefers-color-scheme: dark) {
+        #loading {
+          background: #121314;
+          color: white;
+        }
+        #error-display {
+          background: #3a1c1c;
+          border-color: #ff5555;
+          color: white;
+        }
+      }
+    </style>
   </head>
-  <body>
+  <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div id="loading">
+      <h2>Loading AI Assistant...</h2>
+      <p>If you see this message for more than a few seconds, there might be an issue.</p>
+      <div id="error-display"></div>
+    </div>
     <div id="root"></div>
+    <script>
+      // Display errors during startup
+      window.addEventListener('error', function(e) {
+        const errorDisplay = document.getElementById('error-display');
+        errorDisplay.style.display = 'block';
+        errorDisplay.textContent = 'Error: ' + e.message + '\nAt: ' + e.filename + ':' + e.lineno;
+      });
+      
+      // Hide loading screen when app is mounted
+      const checkAppLoaded = setInterval(function() {
+        const rootElement = document.getElementById('root');
+        if (rootElement && rootElement.children.length > 0) {
+          document.getElementById('loading').style.opacity = 0;
+          setTimeout(() => {
+            document.getElementById('loading').style.display = 'none';
+          }, 500);
+          clearInterval(checkAppLoaded);
+        }
+      }, 100);
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html> 
