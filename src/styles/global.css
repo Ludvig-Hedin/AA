@@ -1,0 +1,109 @@
+/* Set global background color */
+body, html, #root, .bg-gray-900 {
+  background-color: #131314 !important;
+  color: #ffffff;
+}
+
+/* Force background color on all pages */
+.flex-1, .page-container, .computer-use-page {
+  background-color: #131314 !important;
+}
+
+/* Update active sidebar item styling */
+.sidebar-link.active, 
+a[class*="bg-gray-800"] {
+  background-color: #2E3032 !important;
+}
+
+/* Standardize text input styling */
+.text-input {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: white;
+  padding: 12px 16px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Additional sidebar styling */
+.sidebar, [ref="sidebarRef"] {
+  background-color: #242628 !important;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.sidebar-link:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Add these styles to your global.css file */
+
+.input-container {
+  position: relative;
+  margin-top: 1rem;
+}
+
+.send-button {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.send-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Additional fixes for consistent styling */
+/* Force dark background on nested elements */
+.flex-1 *, .page-container *, #root > div {
+  background-color: #131314 !important;
+}
+
+/* Only target specific elements we want to style differently */
+.sidebar,
+.sidebar *,
+button,
+.text-input,
+.input-container *,
+.sidebar-link,
+[class*="bg-gray-800"],
+.rounded-md,
+.rounded-full,
+.p-3.bg-gray-800 {
+  background-color: unset !important;
+}
+
+/* Reset specifically for sidebar */
+.sidebar {
+  background-color: #242628 !important;
+}
+
+/* Reset for active nav items */
+a[style*="background-color: rgb(46, 48, 50)"] {
+  background-color: #2E3032 !important;
+} 

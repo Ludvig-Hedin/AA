@@ -1,13 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Spinner } from '@/components/ui/spinner';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '../components/ui/Button';
+import { Input } from '../components/ui/Input';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/Card';
+import { Label } from '../components/ui/label';
+import { Textarea } from '../components/ui/textarea';
+import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+
+// Deklarera miljövariabeltyp
+declare global {
+  interface ImportMetaEnv {
+    readonly VITE_OPENAI_API_KEY: string;
+  }
+}
+
+// Inline Spinner component
+const Spinner = ({ className = "" }) => (
+  <div className={`animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full ${className}`}>
+    <span className="sr-only">Loading</span>
+  </div>
+);
 
 interface TaskResponse {
   status: string;
@@ -20,9 +33,8 @@ interface TaskResponse {
   };
 }
 
-export function ComputerUse() {
+export const ComputerUse: React.FC = () => {
   const [task, setTask] = useState('');
-  const [apiKey, setApiKey] = useState('');
   const [loading, setLoading] = useState(false);
   const [taskId, setTaskId] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
@@ -35,6 +47,7 @@ export function ComputerUse() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isPolling, setIsPolling] = useState(false);
   const [aiReasoning, setAiReasoning] = useState<string>('');
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   // Scroll to bottom of messages
   useEffect(() => {
@@ -52,17 +65,24 @@ export function ComputerUse() {
     setMessages([{ role: 'user', content: task }]);
     
     try {
+      // Using environment variable for API key
       const response = await axios.post<TaskResponse>('/api/computer-use', {
         task,
-        openai_api_key: apiKey,
+        openai_api_key: import.meta.env.VITE_OPENAI_API_KEY,
+        headless: false
       });
       
-      setTaskId(response.data.task_id);
+      if (response.data.task_id) {
+        setTaskId(response.data.task_id);
+      }
       setStatus(response.data.status);
       setMessages(prev => [...prev, { role: 'assistant', content: `Task started: ${response.data.message}` }]);
       
       // Show browser interface
       setShowBrowser(true);
+      if (response.data.data?.currentUrl) {
+        setBrowserUrl(response.data.data.currentUrl);
+      }
       
       // Poll for updates if task started successfully
       if (response.data.status === 'started' && response.data.task_id) {
@@ -177,175 +197,177 @@ export function ComputerUse() {
   };
 
   return (
-    <Card className="w-full max-w-full mx-auto">
-      <CardHeader>
-        <CardTitle>Computer Use</CardTitle>
-        <CardDescription>
-          Let AI control your computer to perform tasks
-        </CardDescription>
-      </CardHeader>
-      
+    <div className="computer-use-content">
       {!showBrowser ? (
-        <CardContent>
-          <form onSubmit={handleSubmit}>
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="task">Task</Label>
-                <Textarea 
-                  id="task"
-                  placeholder="Describe what you want the AI to do"
-                  value={task}
-                  onChange={(e) => setTask(e.target.value)}
-                  required
-                  className="min-h-20"
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="apiKey">OpenAI API Key</Label>
-                <Input
-                  id="apiKey"
-                  type="password"
-                  placeholder="sk-..."
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  required
-                />
-                <p className="text-sm text-gray-500">
-                  Your API key is used only for this request and not stored
-                </p>
-              </div>
-            </div>
-            
-            <Button 
-              type="submit" 
-              className="mt-4 w-full"
-              disabled={loading}
-            >
-              {loading ? <><Spinner className="mr-2" /> Processing...</> : 'Start Task'}
-            </Button>
-          </form>
+        <Card className="bg-white dark:bg-gray-900 shadow-md border-0">
+          <CardHeader>
+            <CardTitle>Computer Use</CardTitle>
+            <CardDescription>
+              Let AI control your computer to perform tasks for you
+            </CardDescription>
+          </CardHeader>
           
-          {error && (
-            <Alert variant="destructive" className="mt-4">
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-        </CardContent>
+          <CardContent>
+            <form onSubmit={handleSubmit}>
+              <div className="grid gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="task">What would you like the AI to do?</Label>
+                  <Textarea 
+                    id="task"
+                    placeholder="Describe what you want the AI to do, e.g. 'Search for latest news about AI development'"
+                    value={task}
+                    onChange={(e) => setTask(e.target.value)}
+                    required
+                    className="min-h-24 max-w-3xl dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-gray-400 dark:focus:border-gray-500 focus:ring-0"
+                  />
+                </div>
+                
+                <div className="flex items-center space-x-2 max-w-3xl">
+                  <input
+                    type="checkbox"
+                    id="terms"
+                    checked={acceptedTerms}
+                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                    className="rounded text-gray-600 focus:ring-gray-500"
+                  />
+                  <Label htmlFor="terms" className="text-sm text-gray-600 dark:text-gray-300">
+                    I understand that allowing AI to control my computer may carry risks. I accept responsibility for the tasks I instruct the AI to perform.
+                  </Label>
+                </div>
+              </div>
+              
+              <Button 
+                type="submit" 
+                className="mt-4 w-auto px-6"
+                disabled={loading || !acceptedTerms || !task.trim()}
+              >
+                {loading ? <><Spinner className="mr-2" /> Processing...</> : 'Start Task'}
+              </Button>
+            </form>
+            
+            {error && (
+              <Alert variant="destructive" className="mt-4 max-w-3xl">
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
       ) : (
-        <CardContent>
-          <Tabs defaultValue="browser" className="w-full">
-            <TabsList className="grid grid-cols-3 mb-4">
-              <TabsTrigger value="browser">Browser View</TabsTrigger>
-              <TabsTrigger value="interaction">Interaction</TabsTrigger>
-              <TabsTrigger value="debugging">Debugging</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="browser" className="w-full">
-              <div className="border rounded-md overflow-hidden">
-                <div className="bg-gray-100 p-2 flex items-center border-b">
-                  <Input 
-                    type="text" 
-                    value={browserUrl} 
-                    readOnly 
-                    className="flex-1 mr-2"
-                  />
-                  <Button variant="outline" size="sm" disabled>Refresh</Button>
-                </div>
-                <div className="aspect-video bg-white">
-                  <iframe 
-                    src="/api/computer-use/browser-view" 
-                    className="w-full h-full" 
-                    title="Browser View"
-                  />
-                </div>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="interaction" className="w-full h-[600px] flex flex-col">
-              <div className="flex-1 overflow-y-auto border rounded-md p-4 mb-4 bg-gray-50">
-                {messages.map((msg, idx) => (
-                  <div key={idx} className={`mb-4 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-                    <div className={`inline-block p-3 rounded-lg ${
-                      msg.role === 'user' 
-                        ? 'bg-blue-500 text-white' 
-                        : msg.role === 'system' 
-                          ? 'bg-gray-300 text-gray-800' 
-                          : 'bg-gray-200 text-gray-800'
-                    }`}>
-                      <p className="whitespace-pre-wrap">{msg.content}</p>
-                    </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* Browser view takes 2/3 of the space */}
+          <div className="lg:col-span-2">
+            <Card className="h-full bg-white dark:bg-gray-900 shadow-md border-0">
+              <CardHeader className="border-b border-gray-200 dark:border-gray-800">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <span>Browser View</span>
+                  {loading && <Spinner />}
+                </CardTitle>
+                <div className="flex items-center space-x-2">
+                  <div className="flex-1 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-md text-sm truncate">
+                    {browserUrl || 'Loading...'}
                   </div>
-                ))}
-                <div ref={messagesEndRef} />
-              </div>
+                  <div className="flex space-x-1">
+                    <Button 
+                      onClick={handlePauseTask}
+                      disabled={!isPolling || !taskId}
+                      className="h-8 px-2 text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+                      variant="secondary"
+                    >
+                      Pause
+                    </Button>
+                    <Button 
+                      onClick={handleResumeTask}
+                      disabled={isPolling || !taskId}
+                      className="h-8 px-2 text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+                      variant="secondary"
+                    >
+                      Resume
+                    </Button>
+                    <Button 
+                      onClick={handleStopTask}
+                      disabled={!taskId}
+                      className="h-8 px-2 text-red-600 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+                      variant="secondary"
+                    >
+                      Stop
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
               
-              <div className="flex gap-2">
-                <Input 
-                  type="text" 
-                  placeholder="Type a message to the AI..." 
-                  value={userMessage}
-                  onChange={(e) => setUserMessage(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                  className="flex-1"
+              <CardContent className="p-0 h-[calc(100vh-15rem)] overflow-hidden">
+                <iframe 
+                  src="/api/computer-use/browser-view" 
+                  className="w-full h-full border-0"
+                  title="Browser View"
+                  sandbox="allow-same-origin allow-scripts"
                 />
-                <Button onClick={handleSendMessage} disabled={!taskId || !isPolling}>
-                  Send
-                </Button>
-              </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          {/* Chat takes 1/3 of the space */}
+          <div>
+            <Card className="h-full bg-white dark:bg-gray-900 shadow-md border-0 flex flex-col">
+              <CardHeader className="border-b border-gray-200 dark:border-gray-800 pb-3">
+                <CardTitle className="text-lg">Chat with AI</CardTitle>
+              </CardHeader>
               
-              <div className="flex gap-2 mt-4">
-                <Button 
-                  variant="outline" 
-                  onClick={handlePauseTask} 
-                  disabled={!taskId || !isPolling}
-                >
-                  Pause
-                </Button>
-                <Button 
-                  variant="outline" 
-                  onClick={handleResumeTask} 
-                  disabled={!taskId || isPolling}
-                >
-                  Resume
-                </Button>
-                <Button 
-                  variant="destructive" 
-                  onClick={handleStopTask} 
-                  disabled={!taskId}
-                >
-                  Stop Task
-                </Button>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="debugging" className="w-full">
-              <div className="border rounded-md p-4 bg-gray-50 h-[600px] overflow-y-auto">
-                <h3 className="text-lg font-medium mb-2">AI Reasoning</h3>
-                <div className="bg-white p-3 rounded border mb-4">
-                  <pre className="whitespace-pre-wrap text-sm">{aiReasoning || 'No reasoning data available yet.'}</pre>
-                </div>
-                
-                <h3 className="text-lg font-medium mb-2">Task Status: {status}</h3>
-                <p className="text-sm text-gray-500 mb-4">Task ID: {taskId}</p>
-                
-                {taskResult && taskResult.length > 0 && (
-                  <div>
-                    <h4 className="font-medium mb-2">Task History:</h4>
-                    {taskResult.map((item, index) => (
-                      <div key={index} className="mb-4 p-3 border rounded bg-white">
-                        <pre className="whitespace-pre-wrap break-words text-sm">
-                          {JSON.stringify(item, null, 2)}
-                        </pre>
+              <CardContent className="flex-1 overflow-y-auto p-4 h-[calc(100vh-18rem)]">
+                <div className="space-y-4">
+                  {messages.map((message, index) => (
+                    <div 
+                      key={index} 
+                      className={`flex flex-col ${
+                        message.role === 'user' 
+                          ? 'items-end' 
+                          : 'items-start'
+                      }`}
+                    >
+                      <div 
+                        className={`max-w-[80%] rounded-lg px-4 py-2 ${
+                          message.role === 'user' 
+                            ? 'bg-blue-600 text-white' 
+                            : message.role === 'system'
+                              ? 'bg-gray-600 text-white'
+                              : 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                        }`}
+                      >
+                        {message.content}
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {message.role === 'user' ? 'You' : message.role === 'system' ? 'System' : 'AI'}
+                      </div>
+                    </div>
+                  ))}
+                  <div ref={messagesEndRef} />
+                </div>
+              </CardContent>
+              
+              <CardFooter className="border-t border-gray-200 dark:border-gray-800 p-4">
+                <div className="flex w-full space-x-2">
+                  <Input
+                    value={userMessage}
+                    onChange={(e) => setUserMessage(e.target.value)}
+                    placeholder="Type a message..."
+                    onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                    disabled={!taskId || !isPolling}
+                    className="flex-1 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-gray-400 dark:focus:border-gray-500"
+                  />
+                  <Button 
+                    onClick={handleSendMessage}
+                    disabled={!taskId || !isPolling || !userMessage.trim()}
+                    className="w-auto"
+                  >
+                    Send
+                  </Button>
+                </div>
+              </CardFooter>
+            </Card>
+          </div>
+        </div>
       )}
-    </Card>
+    </div>
   );
-} 
+}; 
