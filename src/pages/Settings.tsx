@@ -47,32 +47,32 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-background">
       <Sidebar userName="John Doe" isDarkMode={theme === 'dark'} />
-      <div className="flex-1 p-8 overflow-auto">
+      <div className="flex-1 p-8 overflow-auto bg-background">
         <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Settings</h1>
         
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 border border-gray-200 dark:border-gray-700">
           <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Appearance</h2>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Theme</label>
             <div className="flex space-x-4">
               <button
                 onClick={() => setTheme('light')}
-                className={`px-4 py-2 rounded-md ${
+                className={`px-4 py-2 rounded-md transition-colors ${
                   theme === 'light' 
-                    ? 'bg-blue-500 text-white' 
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                    ? 'bg-blue-500 text-white shadow-sm' 
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
                 }`}
               >
                 Light
               </button>
               <button
                 onClick={() => setTheme('dark')}
-                className={`px-4 py-2 rounded-md ${
+                className={`px-4 py-2 rounded-md transition-colors ${
                   theme === 'dark' 
-                    ? 'bg-blue-500 text-white' 
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                    ? 'bg-blue-500 text-white shadow-sm' 
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
                 }`}
               >
                 Dark
@@ -81,14 +81,14 @@ const Settings: React.FC = () => {
           </div>
         </div>
         
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 border border-gray-200 dark:border-gray-700">
           <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Language</h2>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Language</label>
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="en">English</option>
               <option value="sv">Swedish</option>

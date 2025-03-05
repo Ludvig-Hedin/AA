@@ -22,19 +22,19 @@ export default function ComputerUsePage() {
   }, []);
 
   return (
-    <div className="flex h-screen" style={{ backgroundColor: '#131314' }}>
+    <div className="flex h-screen bg-background">
       {/* Sidebar */}
       <Sidebar userName={userName} isDarkMode={isDarkMode} activePage="computerUse" />
       
       {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-hidden" style={{ backgroundColor: '#131314' }}>
+      <div className="flex-1 flex flex-col overflow-hidden bg-background">
         <PageContainer>
           <PageHeader 
             title="Computer Use" 
             subtitle="Let AI control your browser to perform tasks for you" 
           />
           
-          <div className="flex-1 h-[calc(100vh-160px)]">
+          <div className="flex-1 h-[calc(100vh-160px)] bg-background rounded-lg">
             <ChatWithBrowserUse />
           </div>
         </PageContainer>

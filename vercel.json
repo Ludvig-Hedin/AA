@@ -18,6 +18,18 @@
     }
   ],
   "env": {
-    "AI_SERVER_URL": "YOUR_AI_SERVER_URL"
-  }
+    "AI_SERVER_URL": "YOUR_AI_SERVER_URL",
+    "VITE_SUPABASE_URL": "https://zkwwqjbhoclrnbqgslaj.supabase.co",
+    "VITE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inprd3dxamJob2Nscm5icWdzbGFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA3NzE2NTEsImV4cCI6MjA1NjM0NzY1MX0.I5v8PfzMhHHvasS5j8Mam-sXa0REQdbJga0vB32muqU"
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-XSS-Protection", "value": "1; mode=block" }
+      ]
+    }
+  ]
 } 

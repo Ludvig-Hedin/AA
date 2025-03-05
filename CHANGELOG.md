@@ -43,6 +43,10 @@ All notable changes to this project will be documented in this file.
 - Implemented Files page with grid/list views and folder navigation
 - Added language selection feature to Settings page
 - Created detailed deployment guide in DEPLOYMENT.md
+- Implemented Tasks page with task management functionality
+- Added priority labels and status indicators to Tasks page
+- Implemented getRedirectUrl helper function to fix OAuth redirects in different environments
+- Enhanced Vercel.json with security headers and environment variables
 
 ### Changed
 - Refactored existing sign-up/sign-in pages to follow Client First methodology
@@ -60,6 +64,8 @@ All notable changes to this project will be documented in this file.
 - Improved Settings page with consistent styling and language selection
 - Made all pages use consistent English language throughout the application
 - Enhanced ComputerUse component with better status display and controls
+- Fixed OAuth redirects for Google login to work correctly with Vercel deployment
+- Updated task status indicators with checkboxes and visual priority indicators
 
 ### Fixed
 - Resolved responsive layout issues on mobile devices
@@ -74,6 +80,8 @@ All notable changes to this project will be documented in this file.
 - Fixed language inconsistencies across the application
 - Corrected prop types for Sidebar component
 - Improved layout for mobile responsiveness in agent cards and tables
+- Fixed Google OAuth login redirect issue when deployed to Vercel
+- Corrected environment variable configuration for proper deployment
 
 ## [0.1.0] - 2024-05-12
 ### Added

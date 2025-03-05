@@ -66,6 +66,20 @@ export const oauthProviders = {
   microsoft: { enabled: false, name: 'Microsoft' }
 };
 
+// Helper function to get the correct redirect URL for the current environment
+export const getRedirectUrl = (path: string) => {
+  // Check if we're in a production environment (Vercel)
+  const isProduction = window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1');
+  
+  if (isProduction) {
+    // Use the current origin for production deployments
+    return `${window.location.origin}${path}`;
+  } else {
+    // Use localhost:3000 for development
+    return `http://localhost:3000${path}`;
+  }
+};
+
 export const signInWithOAuth = async (provider: 'google' | 'apple' | 'microsoft') => {
   try {
     // Check if the provider is available in our configuration
@@ -81,7 +95,7 @@ export const signInWithOAuth = async (provider: 'google' | 'apple' | 'microsoft'
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/dashboard`,
+        redirectTo: getRedirectUrl('/dashboard'),
       }
     });
     
@@ -114,7 +128,7 @@ export const isAuthenticated = async () => {
 // Password reset function
 export const resetPassword = async (email: string) => {
   const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${window.location.origin}/reset-password`,
+    redirectTo: getRedirectUrl('/reset-password'),
   });
   
   if (error) throw error;

@@ -184,6 +184,7 @@ export const ChatWithBrowserUse: React.FC<ChatWithBrowserUseProps> = ({
             <div className="text-center">
               <p>How can I help you today?</p>
               <p className="mt-2 text-sm">You can ask me to do tasks in the browser or just chat.</p>
+              <p className="mt-4 text-xs text-gray-500">Note: AI browser control has limitations and operates within your browser permissions.</p>
             </div>
           </div>
         )}
@@ -197,7 +198,7 @@ export const ChatWithBrowserUse: React.FC<ChatWithBrowserUseProps> = ({
                 : message.role === 'system'
                   ? 'mx-auto bg-gray-700 text-gray-200 italic text-sm'
                   : 'mr-auto bg-gray-800 text-white'
-            } rounded-lg p-3`}
+            } rounded-lg p-3 shadow-md`}
           >
             {message.content}
           </div>
@@ -216,7 +217,7 @@ export const ChatWithBrowserUse: React.FC<ChatWithBrowserUseProps> = ({
         
         {/* Browser info */}
         {isBrowserTask && browserUrl && (
-          <div className="mx-auto bg-gray-800 p-3 rounded-lg text-sm text-gray-300">
+          <div className="mx-auto bg-gray-800 p-3 rounded-lg text-sm text-gray-300 shadow-md border border-gray-700">
             <p className="font-semibold">Current URL:</p>
             <p className="truncate">{browserUrl}</p>
           </div>
@@ -224,7 +225,7 @@ export const ChatWithBrowserUse: React.FC<ChatWithBrowserUseProps> = ({
       </div>
       
       {/* Input area */}
-      <div className="border-t border-gray-700 p-4">
+      <div className="border-t border-gray-700 p-4 bg-gray-900 rounded-b-lg">
         <div className="flex gap-2">
           <Textarea
             ref={inputRef}
@@ -232,20 +233,21 @@ export const ChatWithBrowserUse: React.FC<ChatWithBrowserUseProps> = ({
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             placeholder="Type a message or browser task..."
-            className="resize-none min-h-12 max-h-36"
+            className="resize-none min-h-12 max-h-36 rounded-lg border-gray-600 focus:border-blue-500"
             disabled={isProcessing}
           />
           <Button 
             onClick={() => handleSendMessage()} 
             disabled={isProcessing || !inputValue.trim()}
-            className="self-end"
+            className="self-end bg-white text-black hover:bg-gray-100 rounded-lg font-medium"
           >
             {isProcessing ? <Spinner /> : 'Send'}
           </Button>
         </div>
         
         {taskId && (
-          <div className="mt-2 text-sm text-gray-400">
+          <div className="mt-2 text-sm text-gray-400 flex items-center">
+            <span className="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
             AI is controlling your browser. You can give additional instructions.
           </div>
         )}

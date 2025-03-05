@@ -9,6 +9,7 @@
   - [x] Search
   - [x] Files
   - [x] Collections
+  - [x] Tasks
   - [x] Settings
 
 - [x] UI consistency
@@ -53,8 +54,16 @@
 
 4. [ ] Set up environment variables in Vercel
    - [ ] `AI_SERVER_URL`: URL of the deployed AI server
+   - [ ] `VITE_SUPABASE_URL`: Supabase project URL
+   - [ ] `VITE_SUPABASE_ANON_KEY`: Supabase anonymous key
 
-5. [ ] Deploy AI server separately
+5. [ ] Configure Supabase OAuth providers
+   - [ ] In Supabase dashboard, go to Authentication > Providers
+   - [ ] Enable Google provider
+   - [ ] Add the Vercel deployment URL to the list of authorized redirect URLs
+   - [ ] Format: `https://your-vercel-app.vercel.app/dashboard`
+
+6. [ ] Deploy AI server separately
    - [ ] Choose a hosting platform (Heroku, Digital Ocean, AWS, etc.)
    - [ ] Set up environment variables on the hosting platform
    - [ ] Deploy the AI server
@@ -63,6 +72,7 @@
 ## Post-Deployment Checks
 
 - [ ] Verify frontend is accessible and functional
+- [ ] Test Google OAuth login on the deployed site
 - [ ] Test API endpoints connectivity
 - [ ] Verify browser control functionality
 - [ ] Check for any console errors or warnings
