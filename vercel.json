@@ -1,13 +1,23 @@
 {
+  "name": "ai-assistant-browser-control",
   "version": 2,
-  "framework": "vite",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
   "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
   ],
   "env": {
-    "VITE_APP_NAME": "AI Assistant"
+    "AI_SERVER_URL": "YOUR_AI_SERVER_URL"
   }
 } 
