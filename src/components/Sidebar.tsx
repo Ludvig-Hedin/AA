@@ -39,12 +39,22 @@ const Sidebar: React.FC = () => {
       path: '/files', 
       icon: 'description' 
     },
+    { 
+      name: 'Agents', 
+      path: '/agents', 
+      icon: 'smart_toy' 
+    },
+    { 
+      name: 'Computer Use', 
+      path: '/computer-use', 
+      icon: 'computer' 
+    },
   ];
 
   return (
     <div className="w-64 bg-white dark:bg-gray-800 h-screen flex flex-col shadow-md">
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-        <h1 className="text-xl font-bold text-gray-800 dark:text-white">Mitt Projekt</h1>
+        <h1 className="text-xl font-bold text-gray-800 dark:text-white">AI Assistant</h1>
       </div>
       
       <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
@@ -64,7 +74,7 @@ const Sidebar: React.FC = () => {
         ))}
       </nav>
       
-      {/* Inställningsknapp längst ner */}
+      {/* Settings button at the bottom */}
       <div className="p-4 border-t border-gray-200 dark:border-gray-700">
         <Link
           to="/settings"
@@ -75,7 +85,7 @@ const Sidebar: React.FC = () => {
           }`}
         >
           <span className="material-icons mr-3">settings</span>
-          <span>Inställningar</span>
+          <span>Settings</span>
         </Link>
       </div>
     </div>

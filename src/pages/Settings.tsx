@@ -9,50 +9,53 @@ const Settings: React.FC = () => {
   const [notifications, setNotifications] = useState(true);
   const [language, setLanguage] = useState('en');
   
-  // AI-modell inställningar
+  // AI model settings
   const [aiModel, setAiModel] = useState('deepseek');
   const [apiKey, setApiKey] = useState('');
   const [hostingOption, setHostingOption] = useState('direct');
   const [apiEndpoint, setApiEndpoint] = useState('');
 
-  // Ladda användardata (mockad för tillfället)
+  // Load user data (mocked for now)
   useEffect(() => {
-    // Simulerar inladdning av användardata
+    // Simulating loading user data
     setTimeout(() => {
       setUsername('John Doe');
       setEmail('john.doe@example.com');
       
-      // Ladda sparade AI-inställningar från localStorage
+      // Load saved AI settings from localStorage
       const savedApiKey = localStorage.getItem('aiApiKey');
       const savedModel = localStorage.getItem('aiModel');
       const savedHosting = localStorage.getItem('aiHosting');
+      const savedLanguage = localStorage.getItem('language');
       
       if (savedApiKey) setApiKey(savedApiKey);
       if (savedModel) setAiModel(savedModel);
       if (savedHosting) setHostingOption(savedHosting);
+      if (savedLanguage) setLanguage(savedLanguage);
     }, 500);
   }, []);
 
   const handleSaveSettings = () => {
-    // Spara AI-inställningar
+    // Save AI settings
     localStorage.setItem('aiApiKey', apiKey);
     localStorage.setItem('aiModel', aiModel);
     localStorage.setItem('aiHosting', hostingOption);
+    localStorage.setItem('language', language);
     
-    // Implementera annan sparfunktion här
-    alert('Inställningar sparade!');
+    // Implement other save functionality here
+    alert('Settings saved!');
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex h-screen">
       <Sidebar userName="John Doe" isDarkMode={theme === 'dark'} />
       <div className="flex-1 p-8 overflow-auto">
-        <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Inställningar</h1>
+        <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Settings</h1>
         
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Utseende</h2>
+          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Appearance</h2>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tema</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Theme</label>
             <div className="flex space-x-4">
               <button
                 onClick={() => setTheme('light')}
@@ -62,7 +65,7 @@ const Settings: React.FC = () => {
                     : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
                 }`}
               >
-                Ljust
+                Light
               </button>
               <button
                 onClick={() => setTheme('dark')}
@@ -72,16 +75,34 @@ const Settings: React.FC = () => {
                     : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
                 }`}
               >
-                Mörkt
+                Dark
               </button>
             </div>
           </div>
         </div>
         
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">AI-modell</h2>
+          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Language</h2>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Välj AI-modell</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Language</label>
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="en">English</option>
+              <option value="sv">Swedish</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+            </select>
+          </div>
+        </div>
+        
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">AI Model</h2>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select AI Model</label>
             <select
               value={aiModel}
               onChange={(e) => setAiModel(e.target.value)}
@@ -95,12 +116,12 @@ const Settings: React.FC = () => {
           </div>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">API-nyckel</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">API Key</label>
             <input
               type="password"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              placeholder="Ange din API-nyckel här"
+              placeholder="Enter your API key here"
               className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
           </div>
@@ -123,7 +144,7 @@ const Settings: React.FC = () => {
           onClick={handleSaveSettings}
           className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors"
         >
-          Spara inställningar
+          Save Settings
         </button>
       </div>
     </div>

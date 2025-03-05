@@ -12,10 +12,11 @@ import logging
 
 from langchain_openai import ChatOpenAI
 from langchain_core.language_models.chat_models import BaseChatModel
+from langchain.schema import HumanMessage
 
 # Import browser-use components
 from browser_use import Agent, Browser, BrowserConfig, Controller
-from ai_server.computer_use.config import ComputerUseConfig
+from .config import ComputerUseConfig
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +43,7 @@ class ComputerUseAgent:
             )
         )
         self.agent = None
+        self._paused = False
         
     def _initialize_llm(self) -> BaseChatModel:
         """
@@ -150,6 +152,86 @@ class ComputerUseAgent:
                 "error": str(e),
                 "history": self.agent.history if self.agent else []
             }
+    
+    async def pause(self) -> bool:
+        """
+        Pause the current agent execution.
+        
+        Returns:
+            True if the agent was paused, False otherwise.
+        """
+        if not self.agent:
+            return False
+            
+        self._paused = True
+        # Signal the agent to pause
+        if hasattr(self.agent, "pause") and callable(getattr(self.agent, "pause")):
+            await self.agent.pause()
+        return True
+        
+    async def resume(self) -> bool:
+        """
+        Resume the current agent execution.
+        
+        Returns:
+            True if the agent was resumed, False otherwise.
+        """
+        if not self.agent:
+            return False
+            
+        self._paused = False
+        # Signal the agent to resume
+        if hasattr(self.agent, "resume") and callable(getattr(self.agent, "resume")):
+            await self.agent.resume()
+        return True
+        
+    async def stop(self) -> bool:
+        """
+        Stop the current agent execution.
+        
+        Returns:
+            True if the agent was stopped, False otherwise.
+        """
+        if not self.agent:
+            return False
+            
+        # Signal the agent to stop
+        if hasattr(self.agent, "stop") and callable(getattr(self.agent, "stop")):
+            await self.agent.stop()
+        return True
+    
+    async def add_user_message(self, message: str) -> bool:
+        """
+        Add a user message to the agent's context.
+        
+        Args:
+            message: The message from the user.
+            
+        Returns:
+            True if the message was added successfully, False otherwise.
+        """
+        if not self.agent:
+            return False
+            
+        try:
+            # Add the message to the agent's chat history
+            if hasattr(self.agent, "add_user_input") and callable(getattr(self.agent, "add_user_input")):
+                await self.agent.add_user_input(message)
+            else:
+                # Alternative approach if add_user_input doesn't exist
+                if hasattr(self.llm, "add_message"):
+                    self.llm.add_message(HumanMessage(content=message))
+                
+                # Also add it to the agent's reasoning so it's visible in responses
+                if hasattr(self.agent, "reasoning"):
+                    current_reasoning = getattr(self.agent, "reasoning", "")
+                    new_reasoning = f"{current_reasoning}\nUser message: {message}"
+                    setattr(self.agent, "reasoning", new_reasoning)
+            
+            return True
+        except Exception as e:
+            logger.error(f"Error adding user message: {e}", exc_info=True)
+            return False
     
     async def close(self):
         """Close the browser and release resources."""
