@@ -39,7 +39,7 @@
 ## Deployment Steps
 
 1. [x] Ensure all changes are committed
-2. [ ] Push changes to GitHub repository
+2. [x] Push changes to GitHub repository
    ```
    git push origin main
    ```
